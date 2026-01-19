@@ -521,7 +521,7 @@ def main():
         'DASH': 'DASH/USDT'
     }
 
-    output_dir = "/Users/muhamedalanc/crypto-website"
+    output_dir = "/Users/muhamedalanc/crypto-live-dashboard"
 
     print("\n" + "="*70)
     print("  DETAILED RISK ANALYZER - DASHBOARD GENERATOR")
