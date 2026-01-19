@@ -431,6 +431,8 @@ class AltcoinRatioVisualizer:
         config = {
             'displayModeBar': True,
             'displaylogo': False,
+            'scrollZoom': True,
+            'doubleClick': 'reset',
             'toImageButtonOptions': {
                 'format': 'png',
                 'filename': 'orderbook_depth',
