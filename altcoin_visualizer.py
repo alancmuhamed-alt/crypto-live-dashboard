@@ -177,7 +177,9 @@ class AltcoinRatioVisualizer:
         config = {
             'displayModeBar': True,
             'displaylogo': False,
-            'modeBarButtonsToAdd': ['drawline', 'drawopenpath', 'eraseshape'],
+            'scrollZoom': True,
+            'doubleClick': 'reset',
+            'modeBarButtonsToAdd': ['drawline', 'drawopenpath', 'eraseshape', 'pan2d', 'zoom2d'],
             'toImageButtonOptions': {
                 'format': 'png',
                 'filename': 'altcoin_ratio',
