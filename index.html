@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 50%, #0d1117 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hover-glow:hover {
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen text-white">
+    <!-- Navigation -->
+    <nav class="bg-[#0d1117]/80 backdrop-blur-sm border-b border-gray-800 sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
+                    Crypto Analytics
+                </h1>
+                <div class="flex gap-6">
+                    <a href="index.html" class="text-purple-400 font-semibold">Home</a>
+                    <a href="dashboard.html" class="text-gray-400 hover:text-white transition">Dashboard</a>
+                    <a href="altcoin_combined_eth_live.html" class="text-gray-400 hover:text-white transition">Live Chart</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-6 py-16" x-data="cryptoApp()">
+        <!-- Hero Section -->
+        <div class="text-center mb-20">
+            <h2 class="text-6xl font-extrabold mb-6 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent">
+                Real-Time Crypto Intelligence
+            </h2>
+            <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                Advanced risk analysis and market insights powered by live data from Binance
+            </p>
+        </div>
+
+        <!-- Stats Counter -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            <div class="glass-card rounded-2xl p-8 text-center transform hover:scale-105 transition-all duration-300">
+                <div class="text-5xl font-bold text-purple-400 mb-2" x-text="counter1"></div>
+                <div class="text-gray-400">Coins Tracked</div>
+            </div>
+            <div class="glass-card rounded-2xl p-8 text-center transform hover:scale-105 transition-all duration-300">
+                <div class="text-5xl font-bold text-pink-400 mb-2" x-text="counter2 + '%'"></div>
+                <div class="text-gray-400">Accuracy Rate</div>
+            </div>
+            <div class="glass-card rounded-2xl p-8 text-center transform hover:scale-105 transition-all duration-300">
+                <div class="text-5xl font-bold text-blue-400 mb-2" x-text="counter3 + 's'"></div>
+                <div class="text-gray-400">Update Interval</div>
+            </div>
+        </div>
+
+        <!-- Risk Metrics Cards -->
+        <h3 class="text-4xl font-bold mb-10 text-center">Risk Metrics Dashboard</h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <template x-for="(metrics, coin) in riskMetrics" :key="coin">
+                <div class="glass-card rounded-2xl p-8 hover-glow transition-all duration-300"
+                     x-intersect="animateCard($el)">
+                    <div class="flex items-center justify-between mb-6">
+                        <h4 class="text-2xl font-bold" x-text="coin"></h4>
+                        <div class="text-4xl">
+                            <span x-show="coin === 'SOL'">☀️</span>
+                            <span x-show="coin === 'ETH'">💎</span>
+                            <span x-show="coin === 'BNB'">🔶</span>
+                            <span x-show="coin === 'XRP'">⚡</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-400">Risk Score</span>
+                                <span class="font-bold" :class="{
+                                    'text-green-400': metrics.risk < 40,
+                                    'text-yellow-400': metrics.risk >= 40 && metrics.risk < 70,
+                                    'text-red-400': metrics.risk >= 70
+                                }" x-text="metrics.risk"></span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="h-2 rounded-full transition-all duration-1000"
+                                     :class="{
+                                         'bg-green-400': metrics.risk < 40,
+                                         'bg-yellow-400': metrics.risk >= 40 && metrics.risk < 70,
+                                         'bg-red-400': metrics.risk >= 70
+                                     }"
+                                     :style="`width: ${metrics.risk}%`"></div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <div class="text-gray-400 mb-1">Volatility</div>
+                                <div class="font-semibold" x-text="metrics.volatility"></div>
+                            </div>
+                            <div>
+                                <div class="text-gray-400 mb-1">Volume</div>
+                                <div class="font-semibold" x-text="metrics.volume"></div>
+                            </div>
+                            <div class="col-span-2">
+                                <div class="text-gray-400 mb-1">Trend</div>
+                                <div class="font-semibold" x-text="metrics.trend"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a :href="`${coin.toLowerCase()}_risk_analyzer.html`"
+                       class="mt-6 block w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-lg text-center font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-300">
+                        📊 View Detailed Analysis
+                    </a>
+                </div>
+            </template>
+        </div>
+
+        <!-- Live Chart Section -->
+        <div class="mt-20">
+            <h3 class="text-4xl font-bold mb-10 text-center">Live Altcoin Ratio Chart</h3>
+            <div class="glass-card rounded-2xl p-4" style="height: 800px;">
+                <iframe src="altcoin_combined_eth_live.html"
+                        style="width: 100%; height: 100%; border: none; border-radius: 1rem;">
+                </iframe>
+            </div>
+        </div>
+
+        <!-- Last Updated -->
+        <div class="text-center mt-16 text-gray-500">
+            <p>Data updates every 15 minutes</p>
+            <p class="text-sm mt-2" x-text="'Last fetched: ' + lastUpdated"></p>
+        </div>
+    </div>
+
+    <script>
+        function cryptoApp() {
+            return {
+                riskMetrics: {},
+                lastUpdated: '',
+                counter1: 0,
+                counter2: 0,
+                counter3: 0,
+
+                async fetchRiskMetrics() {
+                    try {
+                        const response = await fetch('risk_metrics.json?' + new Date().getTime());
+                        this.riskMetrics = await response.json();
+                        this.lastUpdated = new Date().toLocaleString();
+                    } catch (error) {
+                        console.error('Error fetching risk metrics:', error);
+                    }
+                },
+
+                animateCounters() {
+                    const duration = 2000;
+                    const steps = 60;
+                    const stepTime = duration / steps;
+
+                    let step1 = 0, step2 = 0, step3 = 0;
+                    const target1 = 4, target2 = 97, target3 = 15;
+
+                    const interval = setInterval(() => {
+                        if (step1 < target1) this.counter1 = Math.min(++step1, target1);
+                        if (step2 < target2) this.counter2 = Math.min(step2 += 2, target2);
+                        if (step3 < target3) this.counter3 = Math.min(++step3, target3);
+
+                        if (step1 >= target1 && step2 >= target2 && step3 >= target3) {
+                            clearInterval(interval);
+                        }
+                    }, stepTime);
+                },
+
+                animateCard(el) {
+                    el.style.opacity = '0';
+                    el.style.transform = 'translateY(20px)';
+                    setTimeout(() => {
+                        el.style.transition = 'all 0.6s ease-out';
+                        el.style.opacity = '1';
+                        el.style.transform = 'translateY(0)';
+                    }, 100);
+                },
+
+                init() {
+                    this.fetchRiskMetrics();
+                    this.animateCounters();
+
+                    // Refresh every 5 minutes
+                    setInterval(() => this.fetchRiskMetrics(), 5 * 60 * 1000);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

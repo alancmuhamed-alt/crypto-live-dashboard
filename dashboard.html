@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Dashboard - Crypto Analytics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        crypto: {
+                            dark: '#0d1117',
+                            darker: '#010409',
+                            accent: '#58a6ff',
+                            green: '#3fb950',
+                            red: '#f85149',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .chart-container {
+            height: calc(100vh - 64px);
+        }
+        iframe {
+            border: none;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body class="bg-crypto-darker text-gray-100">
+    <!-- Navigation -->
+    <nav class="bg-crypto-dark border-b border-gray-800 sticky top-0 z-50 backdrop-blur-sm bg-opacity-90">
+        <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-crypto-accent to-purple-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                        </svg>
+                    </div>
+                    <span class="text-xl font-bold bg-gradient-to-r from-crypto-accent to-purple-400 bg-clip-text text-transparent">
+                        Crypto Analytics
+                    </span>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="index.html" class="text-gray-400 hover:text-white transition">Home</a>
+                    <a href="dashboard.html" class="text-crypto-accent font-medium">Dashboard</a>
+                    <div class="flex items-center space-x-2 bg-crypto-darker px-3 py-1.5 rounded-lg border border-crypto-green/30">
+                        <div class="w-2 h-2 bg-crypto-green rounded-full animate-pulse"></div>
+                        <span class="text-crypto-green text-sm font-medium">LIVE</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Info Bar -->
+    <div class="bg-crypto-dark border-b border-gray-800 px-4 py-2">
+        <div class="max-w-full mx-auto flex items-center justify-between text-sm">
+            <div class="flex items-center space-x-6">
+                <div class="flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-crypto-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span class="text-gray-400">Updates every <span class="text-white font-medium">15 minutes</span></span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                    <span class="text-gray-400">Timeframe: <span class="text-white font-medium">15m</span></span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"/>
+                    </svg>
+                    <span class="text-gray-400">Historical: <span class="text-white font-medium">10 days</span></span>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2 text-xs">
+                <span class="text-gray-500">Dubai Time (GMT+4)</span>
+                <span id="clock" class="text-crypto-accent font-mono"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart Container -->
+    <div class="chart-container bg-crypto-darker">
+        <iframe src="altcoin_combined_eth_live.html" title="Altcoin Dashboard"></iframe>
+    </div>
+
+    <script>
+        // Update clock
+        function updateClock() {
+            const now = new Date();
+            // Convert to Dubai time (GMT+4)
+            const dubaiTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Dubai' }));
+            const hours = String(dubaiTime.getHours()).padStart(2, '0');
+            const minutes = String(dubaiTime.getMinutes()).padStart(2, '0');
+            const seconds = String(dubaiTime.getSeconds()).padStart(2, '0');
+            document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // Auto refresh page every 30 seconds to get updated chart
+        setTimeout(() => {
+            location.reload();
+        }, 30000);
+    </script>
+</body>
+</html>
