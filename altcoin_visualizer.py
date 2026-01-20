@@ -791,12 +791,12 @@ class AltcoinRatioVisualizer:
                 xanchor='center',
                 font=dict(size=16)
             ),
-            hovermode='closest',
+            hovermode='x unified',
             template='plotly_dark',
             autosize=True,
             height=None,
             showlegend=True,
-            dragmode=False,  # Plotly drag KAPALI - native kullan
+            dragmode='pan',
             xaxis_rangeslider_visible=False,
             legend=dict(
                 orientation="h",
