@@ -1,0 +1,187 @@
+name: Update Dashboard Data
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'  # Her 15 dakikada bir
+  workflow_dispatch:  # Manuel tetikleme
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install ccxt pandas numpy plotly requests pytz websocket-client
+
+      - name: Update Altcoin Terminal
+        run: |
+          python3 << 'EOF'
+          import ccxt
+          import pandas as pd
+          import numpy as np
+          from datetime import datetime
+          import plotly.graph_objects as go
+          from plotly.subplots import make_subplots
+          import requests
+          import pytz
+          import json
+
+          print("Starting data update...")
+
+          # Initialize exchange
+          exchange = ccxt.binance({'enableRateLimit': True})
+          exchange.load_markets()
+          print("✓ Exchange connected")
+
+          # Fetch ETH data
+          symbol = 'ETH/USDT'
+          timeframe = '15m'
+          days = 10
+          limit = days * 96
+
+          ohlcv = exchange.fetch_ohlcv(symbol, timeframe, limit=limit)
+          df = pd.DataFrame(ohlcv, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
+
+          dubai_tz = pytz.timezone('Asia/Dubai')
+          df['datetime'] = pd.to_datetime(df['timestamp'], unit='ms', utc=True)
+          df['datetime'] = df['datetime'].dt.tz_convert(dubai_tz)
+
+          print(f"✓ Fetched {len(df)} candles")
+
+          # Fetch market data
+          url = "https://api.coingecko.com/api/v3/global"
+          response = requests.get(url, timeout=10)
+          data = response.json()['data']
+
+          total_market_cap = data['total_market_cap']['usd']
+          btc_dominance = data['market_cap_percentage']['btc']
+          eth_dominance = data['market_cap_percentage'].get('eth', 0)
+          usdt_dominance = data['market_cap_percentage'].get('usdt', 0)
+          total3 = total_market_cap * (100 - btc_dominance - eth_dominance) / 100
+          usdt_mc = total_market_cap * usdt_dominance / 100
+
+          print(f"✓ Market data fetched")
+
+          # Calculate ratio
+          current_price = df['close'].iloc[-1]
+          raw_ratio = (total3 - usdt_mc) / btc_dominance
+          scale_factor = current_price / raw_ratio
+
+          df['ar_open'] = df['open']
+          df['ar_high'] = df['high']
+          df['ar_low'] = df['low']
+          df['ar_close'] = df['close']
+
+          # Calculate indicators
+          df['sma50'] = df['ar_close'].rolling(window=50).mean()
+          df['ema21'] = df['ar_close'].ewm(span=21, adjust=False).mean()
+          df['sma20'] = df['ar_close'].rolling(window=20).mean()
+
+          # Create chart
+          fig = make_subplots(rows=2, cols=1, shared_xaxes=True,
+                             vertical_spacing=0.03, row_heights=[0.7, 0.3])
+
+          # Candlestick
+          fig.add_trace(go.Candlestick(
+              x=df['datetime'],
+              open=df['ar_open'], high=df['ar_high'],
+              low=df['ar_low'], close=df['ar_close'],
+              name='Alt Ratio [15M]'
+          ), row=1, col=1)
+
+          # Indicators
+          fig.add_trace(go.Scatter(x=df['datetime'], y=df['sma20'], name='SMA 20',
+                                   line=dict(color='#2196F3', width=1)), row=1, col=1)
+          fig.add_trace(go.Scatter(x=df['datetime'], y=df['ema21'], name='EMA 21',
+                                   line=dict(color='#9C27B0', width=1)), row=1, col=1)
+          fig.add_trace(go.Scatter(x=df['datetime'], y=df['sma50'], name='SMA 50',
+                                   line=dict(color='#FF9800', width=1)), row=1, col=1)
+
+          # Volume
+          colors = ['#26a69a' if c >= o else '#ef5350' for o, c in zip(df['ar_open'], df['ar_close'])]
+          fig.add_trace(go.Bar(x=df['datetime'], y=df['volume'], name='Volume',
+                              marker_color=colors), row=2, col=1)
+
+          dubai_time = datetime.now(dubai_tz).strftime('%Y-%m-%d %H:%M:%S')
+
+          fig.update_layout(
+              title=f'Altcoin Terminal - Updated: {dubai_time} Dubai Time',
+              hovermode='x unified',
+              template='plotly_dark',
+              showlegend=True,
+              dragmode='pan',
+              xaxis_rangeslider_visible=False
+          )
+
+          config = {
+              'displayModeBar': True,
+              'scrollZoom': True,
+              'doubleClick': 'reset'
+          }
+
+          fig.write_html('altcoin_combined_eth_live.html', config=config, include_plotlyjs='cdn')
+          print(f"✓ Chart saved")
+
+          # Update risk_metrics.json
+          metrics = {
+              'last_updated': dubai_time,
+              'eth_price': float(current_price),
+              'btc_dominance': float(btc_dominance),
+              'total3': float(total3)
+          }
+
+          with open('risk_metrics.json', 'w') as f:
+              json.dump(metrics, f, indent=2)
+
+          print(f"✓ Risk metrics updated")
+          print("Done!")
+          EOF
+
+      - name: Update Risk Analyzers
+        run: |
+          python3 detailed_risk_analyzer.py || echo "Risk analyzer skipped"
+
+      - name: Commit and Push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git diff --staged --quiet || git commit -m "Auto-update $(date -u +'%Y-%m-%d %H:%M') UTC"
+          git push
+
+  deploy:
+    needs: update
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
