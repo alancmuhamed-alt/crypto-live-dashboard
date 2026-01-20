@@ -1269,8 +1269,8 @@ class AltcoinRatioVisualizer:
 </body>
 </html>'''
 
-        with open(output_file, 'w', encoding='utf-8') as f:
-            f.write(mobile_html)
+        # Direkt Plotly HTML - kesinlikle interaktif
+        fig.write_html(output_file, config=config, include_plotlyjs='cdn')
 
         print(f"\n✓ Combined dashboard saved to: {output_file}")
 
