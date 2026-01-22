@@ -1,26 +1,6 @@
 {
-  "SOL": {
-    "risk": 32,
-    "volatility": "Low",
-    "volume": "Medium",
-    "trend": "Neutral"
-  },
-  "ETH": {
-    "risk": 44,
-    "volatility": "Low",
-    "volume": "Low",
-    "trend": "Neutral"
-  },
-  "BNB": {
-    "risk": 42,
-    "volatility": "Low",
-    "volume": "Low",
-    "trend": "Neutral"
-  },
-  "DASH": {
-    "risk": 47,
-    "volatility": "Low",
-    "volume": "Low",
-    "trend": "Neutral"
-  }
+  "last_updated": "2026-01-23 00:16:56",
+  "eth_price": 2957.81,
+  "btc_dominance": 57.57918452369212,
+  "total3": 965633864955.5969
 }
