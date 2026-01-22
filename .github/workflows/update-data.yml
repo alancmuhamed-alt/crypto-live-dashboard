@@ -41,10 +41,27 @@ jobs:
 
           print("Starting data update...")
 
-          # Initialize exchange
-          exchange = ccxt.binance({'enableRateLimit': True})
-          exchange.load_markets()
-          print("✓ Exchange connected")
+          # Try multiple exchanges (Binance blocked on GitHub Actions)
+          exchanges_to_try = [
+              ('kraken', ccxt.kraken),
+              ('bybit', ccxt.bybit),
+              ('okx', ccxt.okx),
+          ]
+
+          exchange = None
+          for name, exc_class in exchanges_to_try:
+              try:
+                  exchange = exc_class({'enableRateLimit': True})
+                  exchange.load_markets()
+                  print(f"✓ Using {name} exchange")
+                  break
+              except Exception as e:
+                  print(f"⚠ {name} failed: {str(e)[:50]}")
+                  continue
+
+          if exchange is None:
+              print("All exchanges failed, exiting")
+              exit(1)
 
           # Fetch ETH data
           symbol = 'ETH/USDT'
