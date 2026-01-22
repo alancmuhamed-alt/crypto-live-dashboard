@@ -1,6 +1,26 @@
 {
-  "last_updated": "2026-01-23 00:16:56",
-  "eth_price": 2957.81,
-  "btc_dominance": 57.57918452369212,
-  "total3": 965633864955.5969
+  "SOL": {
+    "risk": 34,
+    "volatility": "Low",
+    "volume": "Medium",
+    "trend": "Neutral"
+  },
+  "ETH": {
+    "risk": 33,
+    "volatility": "Low",
+    "volume": "Medium",
+    "trend": "Neutral"
+  },
+  "BNB": {
+    "risk": 44,
+    "volatility": "Low",
+    "volume": "Low",
+    "trend": "Neutral"
+  },
+  "XRP": {
+    "risk": 44,
+    "volatility": "Low",
+    "volume": "Low",
+    "trend": "Neutral"
+  }
 }
