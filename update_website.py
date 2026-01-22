@@ -84,13 +84,28 @@ def main():
     # Footprint
     footprint_df = calculator.calculate_footprint(ratio_df, lookback=50)
 
-    # Create main chart (WITHOUT order book - GitHub Actions can't do WebSocket)
+    # Fetch Order Book via REST API (not WebSocket)
+    print("📊 Fetching order book data...")
+    orderbook_data = None
+    try:
+        orderbook = calculator.exchange.fetch_order_book('ETH/USDT', limit=20)
+        orderbook_data = {
+            'symbol': 'ETHUSDT',
+            'bids': orderbook['bids'][:20],
+            'asks': orderbook['asks'][:20]
+        }
+        print(f"✅ Order book fetched: {len(orderbook_data['bids'])} bids, {len(orderbook_data['asks'])} asks")
+    except Exception as e:
+        print(f"⚠ Order book fetch failed: {e}")
+        orderbook_data = None
+
+    # Create main chart WITH order book
     print("📊 Creating main chart...")
     output_file = "altcoin_combined_eth_live.html"
     visualizer.create_combined_chart(
         btc_df=overlay_df,
         ratio_df=ratio_df,
-        orderbook_data=None,  # No WebSocket in GitHub Actions
+        orderbook_data=orderbook_data,
         support_levels=sr_result['supports'],
         resistance_levels=sr_result['resistances'],
         bsl_ssl={'bsl': bsl, 'ssl': ssl},
