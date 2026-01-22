@@ -89,12 +89,15 @@ def main():
     orderbook_data = None
     try:
         orderbook = calculator.exchange.fetch_order_book('ETH/USDT', limit=20)
+        # Normalize format to [price, qty] (Kraken may return [price, qty, timestamp])
+        bids = [[float(b[0]), float(b[1])] for b in orderbook['bids'][:20]]
+        asks = [[float(a[0]), float(a[1])] for a in orderbook['asks'][:20]]
         orderbook_data = {
             'symbol': 'ETHUSDT',
-            'bids': orderbook['bids'][:20],
-            'asks': orderbook['asks'][:20]
+            'bids': bids,
+            'asks': asks
         }
-        print(f"✅ Order book fetched: {len(orderbook_data['bids'])} bids, {len(orderbook_data['asks'])} asks")
+        print(f"✅ Order book fetched: {len(bids)} bids, {len(asks)} asks")
     except Exception as e:
         print(f"⚠ Order book fetch failed: {e}")
         orderbook_data = None
