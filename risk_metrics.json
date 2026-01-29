@@ -1,6 +1,6 @@
 {
   "SOL": {
-    "risk": 27,
+    "risk": 28,
     "volatility": "Low",
     "volume": "High",
     "trend": "Neutral"
@@ -20,7 +20,7 @@
   "XRP": {
     "risk": 28,
     "volatility": "Low",
-    "volume": "Very High",
+    "volume": "High",
     "trend": "Neutral"
   }
 }
