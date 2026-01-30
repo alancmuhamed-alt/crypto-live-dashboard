@@ -1,6 +1,6 @@
 {
   "SOL": {
-    "risk": 31,
+    "risk": 41,
     "volatility": "Low",
     "volume": "Medium",
     "trend": "Neutral"
@@ -12,7 +12,7 @@
     "trend": "Neutral"
   },
   "BNB": {
-    "risk": 40,
+    "risk": 39,
     "volatility": "Low",
     "volume": "Low",
     "trend": "Neutral"
