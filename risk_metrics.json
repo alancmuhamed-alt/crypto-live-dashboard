@@ -1,6 +1,6 @@
 {
   "SOL": {
-    "risk": 46,
+    "risk": 45,
     "volatility": "Low",
     "volume": "Very High",
     "trend": "Neutral"
@@ -12,9 +12,9 @@
     "trend": "Neutral"
   },
   "BNB": {
-    "risk": 43,
+    "risk": 42,
     "volatility": "Low",
-    "volume": "Very High",
+    "volume": "High",
     "trend": "Neutral"
   },
   "XRP": {
