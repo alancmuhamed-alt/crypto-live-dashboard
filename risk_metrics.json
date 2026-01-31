@@ -6,7 +6,7 @@
     "trend": "Bearish"
   },
   "ETH": {
-    "risk": 30,
+    "risk": 31,
     "volatility": "Low",
     "volume": "Very High",
     "trend": "Bearish"
@@ -18,7 +18,7 @@
     "trend": "Bearish"
   },
   "XRP": {
-    "risk": 34,
+    "risk": 24,
     "volatility": "Low",
     "volume": "Very High",
     "trend": "Bearish"
