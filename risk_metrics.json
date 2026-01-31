@@ -12,13 +12,13 @@
     "trend": "Bearish"
   },
   "BNB": {
-    "risk": 32,
+    "risk": 42,
     "volatility": "Low",
-    "volume": "Very High",
+    "volume": "Medium",
     "trend": "Bearish"
   },
   "XRP": {
-    "risk": 24,
+    "risk": 25,
     "volatility": "Low",
     "volume": "Very High",
     "trend": "Bearish"
