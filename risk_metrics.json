@@ -6,13 +6,13 @@
     "trend": "Bearish"
   },
   "ETH": {
-    "risk": 37,
+    "risk": 36,
     "volatility": "Low",
     "volume": "Very High",
     "trend": "Bearish"
   },
   "BNB": {
-    "risk": 54,
+    "risk": 53,
     "volatility": "Low",
     "volume": "Low",
     "trend": "Bearish"
