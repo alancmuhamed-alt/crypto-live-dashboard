@@ -6,19 +6,19 @@
     "trend": "Bullish"
   },
   "ETH": {
-    "risk": 43,
+    "risk": 44,
     "volatility": "Low",
-    "volume": "Medium",
+    "volume": "Low",
     "trend": "Bullish"
   },
   "BNB": {
-    "risk": 36,
+    "risk": 46,
     "volatility": "Low",
-    "volume": "Medium",
+    "volume": "Low",
     "trend": "Neutral"
   },
   "XRP": {
-    "risk": 51,
+    "risk": 43,
     "volatility": "Low",
     "volume": "Medium",
     "trend": "Bullish"
