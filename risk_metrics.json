@@ -8,17 +8,17 @@
   "ETH": {
     "risk": 45,
     "volatility": "Low",
-    "volume": "Medium",
+    "volume": "Low",
     "trend": "Neutral"
   },
   "BNB": {
-    "risk": 55,
+    "risk": 35,
     "volatility": "Low",
-    "volume": "Medium",
+    "volume": "High",
     "trend": "Neutral"
   },
   "XRP": {
-    "risk": 42,
+    "risk": 43,
     "volatility": "Low",
     "volume": "Low",
     "trend": "Neutral"
