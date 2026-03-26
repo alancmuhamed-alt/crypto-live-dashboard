@@ -1,24 +1,24 @@
 {
   "SOL": {
-    "risk": 52,
+    "risk": 51,
     "volatility": "Low",
-    "volume": "Medium",
+    "volume": "Low",
     "trend": "Neutral"
   },
   "ETH": {
-    "risk": 43,
+    "risk": 42,
     "volatility": "Low",
     "volume": "High",
     "trend": "Neutral"
   },
   "BNB": {
-    "risk": 41,
+    "risk": 30,
     "volatility": "Low",
     "volume": "Very High",
     "trend": "Neutral"
   },
   "XRP": {
-    "risk": 42,
+    "risk": 32,
     "volatility": "Low",
     "volume": "High",
     "trend": "Neutral"
