@@ -1,8 +1,8 @@
 {
   "SOL": {
-    "risk": 54,
+    "risk": 34,
     "volatility": "Low",
-    "volume": "Low",
+    "volume": "Medium",
     "trend": "Neutral"
   },
   "ETH": {
@@ -18,7 +18,7 @@
     "trend": "Neutral"
   },
   "XRP": {
-    "risk": 53,
+    "risk": 43,
     "volatility": "Low",
     "volume": "Low",
     "trend": "Neutral"
