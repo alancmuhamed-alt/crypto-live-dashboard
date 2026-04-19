@@ -6,7 +6,7 @@
     "trend": "Neutral"
   },
   "ETH": {
-    "risk": 35,
+    "risk": 44,
     "volatility": "Low",
     "volume": "Medium",
     "trend": "Neutral"
@@ -18,9 +18,9 @@
     "trend": "Neutral"
   },
   "XRP": {
-    "risk": 34,
+    "risk": 54,
     "volatility": "Low",
-    "volume": "Medium",
+    "volume": "Low",
     "trend": "Neutral"
   }
 }
