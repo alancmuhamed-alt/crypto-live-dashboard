@@ -1,6 +1,6 @@
 {
   "SOL": {
-    "risk": 58,
+    "risk": 39,
     "volatility": "Low",
     "volume": "Medium",
     "trend": "Neutral"
@@ -8,7 +8,7 @@
   "ETH": {
     "risk": 26,
     "volatility": "Low",
-    "volume": "High",
+    "volume": "Very High",
     "trend": "Neutral"
   },
   "BNB": {
