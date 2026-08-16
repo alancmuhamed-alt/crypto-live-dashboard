@@ -18,9 +18,9 @@
     "trend": "Neutral"
   },
   "XRP": {
-    "risk": 42,
+    "risk": 32,
     "volatility": "Low",
-    "volume": "Low",
+    "volume": "Medium",
     "trend": "Neutral"
   }
 }
