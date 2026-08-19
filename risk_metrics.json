@@ -12,13 +12,13 @@
     "trend": "Neutral"
   },
   "BNB": {
-    "risk": 52,
+    "risk": 61,
     "volatility": "Low",
     "volume": "Low",
     "trend": "Neutral"
   },
   "XRP": {
-    "risk": 32,
+    "risk": 22,
     "volatility": "Low",
     "volume": "Very High",
     "trend": "Neutral"
